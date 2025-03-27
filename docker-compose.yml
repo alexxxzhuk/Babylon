@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: babylon_postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  babylon:
+    build: .
+    container_name: babylon
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      - DB_NAME=babylon_postgres
+    expose:
+      - "8080"
+
+  nginx:
+    image: nginx:stable
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - babylon
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  migrate:
+    image: migrate/migrate
+    container_name: migrate
+    command: [
+      "-path", "/migrations",
+      "-database", "postgres://myuser:mypassword@postgres:5432/babylon_postgres?sslmode=disable",
+      "up"
+    ]
+    volumes:
+      - ./migrations:/migrations
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
