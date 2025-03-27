@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy over SSH
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no deploy@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh deploy@${{ secrets.SERVER_IP }} << 'EOF'
             cd ~/apps/babylon
             git pull origin main
             docker-compose pull
