@@ -7,9 +7,15 @@ import (
 	"github.com/alexxxzhuk/babylon/internal/database"
 	"github.com/alexxxzhuk/babylon/internal/handlers"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Загружаем переменные окружения из .env
+	if err := godotenv.Load(); err != nil {
+		log.Println(".env файл не найден, используются переменные окружения из системы")
+	}
+
 	// Подключаемся к PostgreSQL
 	db := database.Connect()
 	defer db.Close()
@@ -21,6 +27,7 @@ func main() {
 	api := router.Group("/api/v1")
 	{
 		api.POST("/users", handlers.CreateUserHandler(db))
+		api.POST("/auth/login", handlers.LoginHandler(db))
 	}
 
 	// Читаем порт из переменных окружения (по умолчанию 8080)
