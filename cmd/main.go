@@ -32,10 +32,16 @@ func main() {
 		api.POST("/auth/refresh", handlers.RefreshTokenHandler(db))
 		api.POST("/auth/logout", handlers.LogoutHandler(db))
 
+		// Подтверждение приглашения — доступно без авторизации
+		api.POST("/accept-invite/:token", handlers.AcceptInviteHandler(db))
+
 		auth := api.Group("/")
 		auth.Use(middleware.AuthMiddleware())
 		{
 			auth.GET("/me", handlers.GetMeHandler(db))
+			auth.POST("/invitations", handlers.CreateInvitationHandler(db))
+			auth.GET("/contacts", handlers.GetContactsHandler(db))
+			auth.GET("/chats", handlers.GetChatsHandler(db))
 		}
 	}
 
