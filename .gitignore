@@ -1,0 +1,35 @@
+# Системные файлы и IDE
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Go-артефакты
+bin/
+*.exe
+*.test
+*.out
+*.log
+
+# Сборка Go
+/main
+/main.exe
+
+# Зависимости Go (если вдруг)
+vendor/
+
+# Docker и окружение
+.env
+.dockerignore
+docker-compose.override.yml
+
+# Базы данных и временные файлы
+*.sqlite
+*.db
+*.pid
+
+# GitHub Actions / CI
+*.pem
+*.key
+*.crt
+secrets.env
