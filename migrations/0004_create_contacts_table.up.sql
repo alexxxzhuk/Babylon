@@ -1,0 +1,7 @@
+CREATE TABLE contacts (
+  id SERIAL PRIMARY KEY,
+  owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  contact_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE (owner_id, contact_id)
+);

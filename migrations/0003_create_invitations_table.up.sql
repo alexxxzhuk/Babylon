@@ -1,0 +1,8 @@
+CREATE TABLE invitations (
+  id SERIAL PRIMARY KEY,
+  inviter_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  email VARCHAR(255) NOT NULL,
+  message TEXT,
+  token UUID UNIQUE NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
