@@ -26,8 +26,10 @@ func GetMeHandler(db *sql.DB) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"first_name": firstName,
-			"last_name":  lastName,
+			"user": gin.H{
+				"first_name": firstName,
+				"last_name":  lastName,
+			},
 		})
 	}
 }
