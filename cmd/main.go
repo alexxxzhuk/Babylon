@@ -6,6 +6,7 @@ import (
 
 	"github.com/alexxxzhuk/babylon/internal/database"
 	"github.com/alexxxzhuk/babylon/internal/handlers"
+	"github.com/alexxxzhuk/babylon/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -28,6 +29,14 @@ func main() {
 	{
 		api.POST("/users", handlers.CreateUserHandler(db))
 		api.POST("/auth/login", handlers.LoginHandler(db))
+		api.POST("/auth/refresh", handlers.RefreshTokenHandler(db))
+		api.POST("/auth/logout", handlers.LogoutHandler(db))
+
+		auth := api.Group("/")
+		auth.Use(middleware.AuthMiddleware())
+		{
+			auth.GET("/me", handlers.GetMeHandler(db))
+		}
 	}
 
 	// Читаем порт из переменных окружения (по умолчанию 8080)
