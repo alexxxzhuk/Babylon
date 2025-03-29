@@ -26,10 +26,21 @@ jobs:
       - name: Deploy over SSH
         run: |
           ssh deploy@${{ secrets.SERVER_IP }} << 'EOF'
+            set -e  # если что-то упадёт — сразу выходим
             cd ~/apps/babylon
+
+            echo "Pulling latest code..."
             git pull origin main
+
+            echo "Stopping containers..."
             docker-compose down
+
+            echo "Cleaning up unused images/volumes..."
             docker system prune -af
+
+            echo "Rebuilding and restarting..."
             docker-compose build --no-cache
             docker-compose up -d
+
+            echo "Done! ✅"
           EOF
