@@ -24,12 +24,6 @@ func main() {
 	// Инициализируем Gin
 	router := gin.Default()
 
-	// Логирование всех входящих путей
-	router.Use(func(c *gin.Context) {
-		log.Println("[DEBUG] Запрос:", c.Request.Method, c.Request.URL.Path)
-		c.Next()
-	})
-
 	// Группа API-эндпоинтов
 	api := router.Group("/api/v1")
 	{
