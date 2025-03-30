@@ -1,29 +1,3 @@
-// import { useAuth } from './hooks/useAuth'
-// import LoginForm from './components/LoginForm'
-// import Welcome from './components/Welcome'
-
-// export default function App() {
-//   const { me, loading, error, handleLogin } = useAuth()
-
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center text-gray-500">
-//         Загрузка...
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-//       {me ? (
-//         <Welcome me={me} />
-//       ) : (
-//         <LoginForm onLogin={handleLogin} error={error} />
-//       )}
-//     </div>
-//   )
-// }
-
 import { useEffect, useState } from 'react'
 import { getChats } from './api/client'
 import Layout from './components/Layout'
@@ -46,7 +20,11 @@ export default function App() {
   }
 
   if (!me) {
-    return <LoginForm onLogin={handleLogin} error={error} />
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <LoginForm onLogin={handleLogin} error={error} />
+      </div>
+    )
   }
 
   return (
