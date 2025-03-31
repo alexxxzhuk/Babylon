@@ -1,4 +1,4 @@
-import type { MeResponse } from '../types'
+import type { MeResponse } from '../../types'
 
 export default function Welcome({ me }: { me: MeResponse['user'] }) {
   return (
