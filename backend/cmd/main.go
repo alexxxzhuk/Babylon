@@ -41,6 +41,7 @@ func main() {
 			auth.GET("/me", handlers.GetMeHandler(db))
 			auth.POST("/invitations", handlers.CreateInvitationHandler(db))
 			auth.GET("/contacts", handlers.GetContactsHandler(db))
+			auth.GET("/contacts/:id", handlers.GetContactByIDHandler(db))
 			auth.GET("/chats", handlers.GetChatsHandler(db))
 		}
 	}

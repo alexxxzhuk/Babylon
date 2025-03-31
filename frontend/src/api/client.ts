@@ -46,3 +46,15 @@ export async function refreshToken(): Promise<{ access_token: string; refresh_to
     const res = await api.get('/chats')
     return res.data
   }
+
+  export interface Contact {
+    id: number
+    first_name: string
+    last_name: string
+    email: string
+  }
+  
+  export async function getContactById(id: string): Promise<{ contact: Contact }> {
+    const res = await api.get(`/contacts/${id}`)
+    return res.data
+  }
