@@ -1,0 +1,7 @@
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  chat_id UUID NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
+  sender_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  original_content TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);

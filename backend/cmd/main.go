@@ -43,6 +43,8 @@ func main() {
 			auth.GET("/contacts", handlers.GetContactsHandler(db))
 			auth.GET("/contacts/:id", handlers.GetContactByIDHandler(db))
 			auth.GET("/chats", handlers.GetChatsHandler(db))
+			auth.POST("/chats/:chat_id/messages", handlers.CreateMessageHandler(db))
+			auth.GET("/chats/:chat_id/messages", handlers.GetMessagesHandler(db))
 		}
 	}
 

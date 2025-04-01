@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { LoginResponse, MeResponse, Chat } from '../types'
+import type { LoginResponse, MeResponse, Chat, Message } from '../types'
 
 const api = axios.create({
     baseURL: '/api/v1',
@@ -57,4 +57,10 @@ export async function refreshToken(): Promise<{ access_token: string; refresh_to
   export async function getContactById(id: string): Promise<{ contact: Contact }> {
     const res = await api.get(`/contacts/${id}`)
     return res.data
+  }
+
+  export async function getMessages(chatId: string): Promise<{ messages: Message[] }> {
+    const res = await api.get(`/chats/${chatId}/messages`)
+    const safeMessages = Array.isArray(res.data.messages) ? res.data.messages : []
+    return { messages: safeMessages }
   }
