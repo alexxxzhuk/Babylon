@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Chat, Message } from '../../types'
 import { getMessages, getContactById } from '../../api/client'
+import MessageInput from '../chat/MessageInput.tsx'
 
 interface MainViewProps {
   activeTab: 'chats' | 'contacts'
@@ -15,14 +16,20 @@ export default function MainView({ activeTab, selectedId }: MainViewProps) {
 
   const [contact, setContact] = useState<any>(null)
 
-  useEffect(() => {
-    if (activeTab === 'chats' && selectedId) {
+  const loadMessages = () => {
+    if (selectedId) {
       setLoading(true)
       setError(null)
       getMessages(selectedId)
         .then((data) => setMessages(Array.isArray(data.messages) ? data.messages : []))
         .catch(() => setError('Ошибка при загрузке сообщений'))
         .finally(() => setLoading(false))
+    }
+  }
+
+  useEffect(() => {
+    if (activeTab === 'chats' && selectedId) {
+      loadMessages()
     } else if (activeTab === 'contacts' && selectedId?.startsWith('contact-')) {
       const contactId = selectedId.replace('contact-', '')
       setLoading(true)
@@ -66,25 +73,34 @@ export default function MainView({ activeTab, selectedId }: MainViewProps) {
     )
   }
 
-  if (activeTab === 'chats' && Array.isArray(messages) && messages.length > 0) {
+  if (activeTab === 'chats') {
     return (
-      <div className="flex flex-col space-y-2 text-gray-800 max-h-[80vh] overflow-y-auto">
-        {messages
-          .slice()
-          .reverse()
-          .map((msg) => (
-            <div key={msg.id} className="bg-gray-100 p-2 rounded shadow-sm">
-              <div className="text-sm text-gray-500">{new Date(msg.created_at).toLocaleString()}</div>
-              <div>{msg.original_content}</div>
-            </div>
-          ))}
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto flex flex-col space-y-2 text-gray-800 max-h-[70vh]">
+          {messages.length === 0 ? (
+            <div className="text-gray-700">Сообщений пока нет</div>
+          ) : (
+            messages
+              .slice()
+              .reverse()
+              .map((msg) => (
+                <div key={msg.id} className="bg-gray-100 p-2 rounded shadow-sm">
+                  <div className="text-sm text-gray-500">
+                    {new Date(msg.created_at).toLocaleString()}
+                  </div>
+                  <div>{msg.original_content}</div>
+                </div>
+              ))
+          )}
+        </div>
+
+        <MessageInput
+          chatId={selectedId}
+          onMessageSent={loadMessages}
+        />
       </div>
     )
   }
 
-  return (
-    <div className="text-gray-700">
-      Сообщений пока нет
-    </div>
-  )
+  return null
 }

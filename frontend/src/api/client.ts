@@ -64,3 +64,9 @@ export async function refreshToken(): Promise<{ access_token: string; refresh_to
     const safeMessages = Array.isArray(res.data.messages) ? res.data.messages : []
     return { messages: safeMessages }
   }
+
+  export async function sendMessage(chatId: string, content: string): Promise<void> {
+    await api.post(`/chats/${chatId}/messages`, {
+      original_content: content
+    })
+  }
