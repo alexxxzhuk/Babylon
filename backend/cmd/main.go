@@ -6,6 +6,7 @@ import (
 
 	"github.com/alexxxzhuk/babylon/internal/database"
 	"github.com/alexxxzhuk/babylon/internal/handlers"
+	"github.com/alexxxzhuk/babylon/internal/websocket"
 	"github.com/alexxxzhuk/babylon/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -27,6 +28,8 @@ func main() {
 	// Группа API-эндпоинтов
 	api := router.Group("/api/v1")
 	{
+		api.GET("/ws", websocket.WebSocketHandler)
+
 		api.POST("/users", handlers.CreateUserHandler(db))
 		api.POST("/auth/login", handlers.LoginHandler(db))
 		api.POST("/auth/refresh", handlers.RefreshTokenHandler(db))

@@ -47,3 +47,24 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func VerifyAccessToken(tokenString string) (int, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET")), nil
+	})
+	if err != nil || !token.Valid {
+		return 0, err
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || claims["type"] != "access" {
+		return 0, err
+	}
+
+	userID, ok := claims["sub"].(float64)
+	if !ok {
+		return 0, err
+	}
+
+	return int(userID), nil
+}
